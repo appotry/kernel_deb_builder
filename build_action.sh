@@ -6,9 +6,9 @@ VERSION=$(grep 'Kernel Configuration' < config | awk '{print $3}')
 sed -i "/deb-src/s/# //g" /etc/apt/sources.list
 
 # install dep
-sudo apt update
-sudo apt install -y wget
-sudo apt build-dep -y linux
+apt update
+apt install -y wget xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev
+apt build-dep -y linux
 
 # change dir to workplace
 cd "${GITHUB_WORKSPACE}" || exit
@@ -34,5 +34,6 @@ make deb-pkg -j"$CPU_CORES"
 
 # move deb packages to artifact dir
 cd ..
+rm -rfv *dbg*.deb
 mkdir "artifact"
 mv ./*.deb artifact/
